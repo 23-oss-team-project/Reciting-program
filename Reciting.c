@@ -34,8 +34,10 @@ int main() {
             update();
         else if(in == 5)
             each();
-	else if(in == 6)
-	    ranVerse(); 
+	    else if(in == 6)
+	        ranVerse(); 
+        else if(in == 7)
+            break;
         
         else
             printf("잘못된 입력입니다. 다시 입력하세요 \n\n");
@@ -50,12 +52,13 @@ int firstpage(){//처음 페이지로 메뉴 고르고 그 값을 반환까지 �
     //////////////////////첫 페이지 출력 내용 작성
 	
 
-    printf("1. reciting\n");
-    printf("2. create\n");
-    printf("3. delete\n");
-    printf("4. update\n");
-    printf("5. each\n");
-    printf("6. randomVerse\n\n");
+    printf("말씀 암송 프로그램입니다.");
+    printf("1. 암송 프로그램\n");
+    printf("2. 암송 텍스트 만들기\n");
+    printf("3. 암송 텍스트 삭제\n");
+    printf("4. 암송 텍스트 업데이트\n");
+    printf("5. 오늘의 말씀\n");
+    printf("7. 종료\n\n");
 	
 	
 	
@@ -182,12 +185,12 @@ void reciting(){
 			goto b2;
 		}
 		else if (strcmp(t, ">\n") == 0) {//show the contents of verse
-			printf("%d. %s", v, a);
+			hint(t, thebook);
 			goto b2;
 		}
 		else if (strcmp(t, "?\n") == 0) {//jump to next verse
 			printf("\n* 이어서 입력\n> 힌트\n/ 다음 절로 이동\n] 다음 단락으로 이동\n? 도움말\n- 종료\n\n");
-			hint(t, thebook);
+			
 		}
 		else if (strcmp(t, "]\n") == 0) //jump to next paragraph
 			while (!feof(f)) {
@@ -207,17 +210,17 @@ void reciting(){
 void create(){
 	
 	char ct[60] ; 
-	printf("새롭게 만들고 싶은 챕터를 알려주세요. ");
+	printf("새롭게 만들고 싶은 책을 알려주세요. ");
 	scanf("%s",ct);
 	FILE* fp ; 
-	fp = fopen("booklist.txt","w");
-	fprintf(fp,"%s",ct);
+	fp = fopen("booklist.txt","a");
+	fprintf(fp,"\n%s",ct);
 	fclose(fp) ; 
 	FILE* nc ; 
 	strcat(ct,".txt");
 	nc = fopen(ct,"w");
-	char vs[128] ; 
-	printf("쓰고 싶은 내용을 절 별로 입력해주세요.\n 내용을 다 입력하셨다면 0번 을 눌러서 종료해주세요.\n 종료: 0 \n ");
+	char vs[Max] ; 
+	printf("책의 내용을 장과 절 별로 입력해주세요.\n양식은 기존의 파일의 양식에 맞춰서 써 주세요.\n내용을 다 입력하셨다면 0번 을 눌러서 종료해주세요.\n종료: 0 \n");
 	scanf(" %[^\n]",vs);
 	
 	while(!(strcmp(vs,"0")==0)){
@@ -227,30 +230,38 @@ void create(){
 		scanf(" %[^\n]",vs);
 	}
 	fclose(nc);
-	printf("생성되었습니다.\n");
+	printf("생성되었습니다.\n\n");
 }
+
 void delete(){
-	FILE* fp ; 
-	char chap[128] ; 
+	FILE* fp, *f ; 
+    int i=0, k=0, nu;
+	char chap[66][128] ; 
+
 	char ucd[50];
 	char cd[50] ; 
 	fp=fopen("booklist.txt","r");
+    printf("현재 저장되어 있는 책들: \n");
 	while (!feof(fp) ) {
-		fgets( chap , 128, fp);
-		printf("%s",chap);
+		fgets( chap[i] , 128, fp);
+		printf("%d. %s",i+1, chap[i]);
+        i++;
 	}
-	printf("삭제하고싶은 챕터를 입력해주세요. ");
-	scanf("%s",ucd);		
+    fclose(fp);
+	printf("\n\n삭제하고싶은 책의 번호를 입력해주세요. ");
+	scanf("%d", &nu);		
 
-	while(!feof(fp)){
-		fgets( cd , 50, fp);
-		if(strcmp(ucd,cd)==0){
-			strcpy(cd," ") ;
-		}
-	}
-
+	f = fopen("booklist.txt", "w");
+    while(k<i){
+        if(k!=nu-1)
+            fprintf(f, "%s", chap[k]);
+        k++;
+    }
+    fclose(f);
+    printf("삭제 완료\n\n");
 	
 }
+
 void update(){
 
 	FILE* chl ;
@@ -262,7 +273,7 @@ void update(){
 	}
 	fclose(chl) ; 
 	char uch [60] ;
-	printf("수정하고싶은 챕터를 말해주세요.");
+	printf("수정하고싶은 책을 말해주세요. ");
 	scanf("%s",uch) ; 
 	strcat(uch,".txt");
 
@@ -270,7 +281,7 @@ void update(){
 	ucf = fopen(uch,"w");
 	char ubv[128] ; 
 
-	printf("수정하려는 내용을 절 별로 입력해주세요.\n 내용을 다 입력하셨다면 0번 을 눌러서 종료해주세요.\n 종료: 0 \n ");
+	printf("수정하고자 하는 책의 내용을 장과 절 별로 입력해주세요.\n양식은 기존의 파일의 양식에 맞춰서 써 주세요.\n내용을 다 입력하셨다면 0번 을 눌러서 종료해주세요.\n종료: 0 \n");
 	scanf(" %[^\n]",ubv);
 	while(!(strcmp(ubv,"0")==0)){
 		fprintf(ucf,"%s",ubv);
@@ -323,7 +334,7 @@ void hint(char str[] /* 구절 */ , char tf [] /*텍스트 파일 이름*/){
 	}
 }
 
-
+/*
 void ranVerse(){
 	
 	FILE* ch ;
@@ -369,30 +380,31 @@ void ranVerse(){
 }
 
 
+*/
 
-
-
-void each(){
-    FILE* fp ; 
-    fp = fopen("dayBIbleVerse.txt","r");
+void each() {
+    FILE* fp;
+    fp = fopen("dayBibleVerse.txt", "r"); // Open the file in "r" mode for reading
 
     time_t x1;
-    struct tm *p;
+    struct tm* p;
     x1 = time(NULL);
-    p = localtime(&x1); // 시간함수
-	int* t ;
-    char  dv[128] ; 
-	
-	while(!feof(fp)){
-		fscanf(fp,"%d",t); 
-		if(*t== p->tm_mday){
-			fgets(dv,128,fp);
-			break ; 
-		}
-	}
-   
-	fclose(fp);
-	printf("%s",dv);
+    p = localtime(&x1); // Get the current time
 
+    int* t = malloc(sizeof(int)); // Allocate memory for t
+    char dv[128];
 
+    while (!feof(fp)) {
+        fscanf(fp, "%d", t); // Read an integer from the file into t
+        fgets(dv, Max, fp); 
+        if (*t == p->tm_mday) { // Compare the read value with the current day
+            break;
+        }
+    }
+
+    fclose(fp); // Close the file
+    printf("%s", dv); // Print the verse
+
+    free(t); // Free the allocated memory
+    return;
 }
