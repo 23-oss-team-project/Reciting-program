@@ -17,7 +17,7 @@ void delete();
 void update();
 void each();
 void ranVerse();
-void hint() ; 
+void hint(char str[] , char tf []) ; 
 
 int main() {
     int in;
@@ -90,7 +90,7 @@ void reciting(){
     strcpy(thebook, books[bi-1]);
     strcat(thebook, ".txt");
 
-    printf("%s", thebook);
+    //printf("%s", thebook);
 
 	//\
 
@@ -111,7 +111,7 @@ void reciting(){
 	a = (char*)malloc(Max);
 	t = (char*)malloc(Max);
 	t1 = (char*)malloc(Max);
-	int v = -1, i;
+	int v, i;
 	sprintf(a, "%d", chap);
 	strcat(a, "장\n");
 	printf("%s", a);
@@ -126,17 +126,18 @@ void reciting(){
 			if (strncmp(t, a, 4) == 0)
 				break;
 	}
-	if (vers > 0)//if choose the verse
-		while (!feof(f)) {
-			fscanf(f, "%d. ", &v);
-			fgets(a, Max, f);
-			if (v == vers)
-				break;
-		}
+	printf("%s", t);
+	while (!feof(f)) {
+		fscanf(f, "%d. ", &v);
+		fgets(a, Max, f);
+		if (v == vers)
+			break;
+        printf("%d\n", v);
+	}
 	
 	if (vers != v && strcmp(t, "\n") != 0 && vers != -1) {//if file ends without wanted result, finish the pg with error message
-		printf("cannot be found\n");
-		exit(0);
+		printf("해당 구절을 찾을 수 없습니다. \n\n");
+		return;
 	}//end searching
     
 	goto b2;
@@ -298,14 +299,14 @@ void update(){
 
 void hint(char str[] /* 구절 */ , char tf [] /*텍스트 파일 이름*/){
 	int hn ; //원하는 힌트 번호
-	printf("어떤 힌트를 원하시나요?\n 1. 첫글자 힌트\n 2. 글자 수 힌트\n 3. 챕터 힌트\n 0. 취소\n ");
+	printf("어떤 힌트를 원하시나요?\n1. 첫글자 힌트\n2. 글자 수 힌트\n3. 챕터 힌트\n0. 취소\n ");
 	scanf("%d",&hn);
 	if(strcmp(tf,"dayBibleVerse.txt")==0){
 		if( hn == 1 ){
 			printf("%c",str[3]);
 		}
 		if( hn == 2 ){
-			printf("%lu",strlen(str));
+			printf("%lu글자입니다. \n\n",strlen(str));
 		}
 		if( hn == 3 ){
 			while(1){ // str의 글자 하나씩 검사
@@ -363,7 +364,7 @@ void ranVerse(){
     FILE* fp ; 
 
 	int line=0;
-	char v[128];
+	char v[Max];
 
 	fp=fopen(rcap,"r");
     
@@ -373,26 +374,26 @@ void ranVerse(){
     }
     
 	while (!feof(fp)) {
-        fgets(v, sizeof(v), fp);
+        fgets(v, Max, fp);
         line++;
     }
 
 	srand(time(0)); 
-	int rn = rand()%line+1; 
+	int rn = rand()%line; 
 
 	int t ;
-    char  dv[128] ; 
+    char  dv[Max] ; 
 	
 	while(!feof(fp)){
-		fscanf(fp,"%d",&t); 
-		fgetc(fp);
+		fscanf(fp,"%d. ",&t); 
+        fgets(dv, Max, fp);
+		
 		if( t== rn){
-			fgets(dv, sizeof(dv), fp);
 			break ; 
 		}
 	}
 	fclose(fp);
-	printf("%s",dv);
+	printf("%s\n",dv);
 }
 
 
@@ -408,7 +409,7 @@ void each() {
     p = localtime(&x1); // Get the current time
 
     int* t = malloc(sizeof(int)); // Allocate memory for t
-    char dv[128];
+    char dv[Max];
 
     while (!feof(fp)) {
         fscanf(fp, "%d. ", t); // Read an integer from the file into t
@@ -419,8 +420,5 @@ void each() {
     }
     free(t); // Free the allocated memory
     fclose(fp); // Close the file
-    printf("%s", dv); // Print the verse
-
-    
-    
+    printf("%s\n\n", dv); // Print the verse
 }
