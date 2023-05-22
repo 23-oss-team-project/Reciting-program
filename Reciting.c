@@ -34,8 +34,8 @@ int main() {
             update();
         else if(in == 5)
             each();
-	    else if(in == 6)
-	        ranVerse(); 
+	/*else if(in == 6)
+	        ranVerse(); */
         else if(in == 7)
             break;
         
