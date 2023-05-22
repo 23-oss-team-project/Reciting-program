@@ -52,12 +52,13 @@ int firstpage(){//처음 페이지로 메뉴 고르고 그 값을 반환까지 �
     //////////////////////첫 페이지 출력 내용 작성
 	
 
-    printf("말씀 암송 프로그램입니다.");
+    printf("말씀 암송 프로그램입니다.\n\n");
     printf("1. 암송 프로그램\n");
     printf("2. 암송 텍스트 만들기\n");
     printf("3. 암송 텍스트 삭제\n");
     printf("4. 암송 텍스트 업데이트\n");
     printf("5. 오늘의 말씀\n");
+    printf("6. 말씀 뽑기\n");
     printf("7. 종료\n\n");
 	
 	
@@ -334,18 +335,26 @@ void hint(char str[] /* 구절 */ , char tf [] /*텍스트 파일 이름*/){
 	}
 }
 
-/*
+
 void ranVerse(){
 	
 	FILE* ch ;
 	ch = fopen("booklist.txt","r");
 	char cp[66][30] ; 
-	int l1 ; 
-	while (fgets(cp[l1], sizeof(cp[l1]), ch) != NULL) {
+	int l1 =0; 
+    
+	while (!feof(ch)) {
+        fgets(cp[l1], 30, ch);
+        if(cp[l1][strlen(cp[l1])-1] == '\n')
+            cp[l1][strlen(cp[l1])-1] ='\0';
+        if(strlen(cp[l1]) <= 1)
+            continue;
         l1++;
     }
+    l1--;
 	srand(time(0)); 
 	int rcp = rand()%l1;
+
 	char rcap[35] ; 
 	strcpy(rcap,cp[rcp]);
 	strcat(rcap,".txt");
@@ -357,7 +366,14 @@ void ranVerse(){
 	char v[128];
 
 	fp=fopen(rcap,"r");
-	while (fgets(v, sizeof(v), fp) != NULL) {
+    
+    if (fp == NULL) {
+        printf("Failed to open the file %s.\n", rcap);
+        return; // or handle the error appropriately
+    }
+    
+	while (!feof(fp)) {
+        fgets(v, sizeof(v), fp);
         line++;
     }
 
@@ -380,7 +396,7 @@ void ranVerse(){
 }
 
 
-*/
+
 
 void each() {
     FILE* fp;
@@ -395,16 +411,16 @@ void each() {
     char dv[128];
 
     while (!feof(fp)) {
-        fscanf(fp, "%d", t); // Read an integer from the file into t
-        fgets(dv, Max, fp); 
+        fscanf(fp, "%d. ", t); // Read an integer from the file into t
+        fgets(dv, Max, fp);
         if (*t == p->tm_mday) { // Compare the read value with the current day
             break;
         }
     }
-
+    free(t); // Free the allocated memory
     fclose(fp); // Close the file
     printf("%s", dv); // Print the verse
 
-    free(t); // Free the allocated memory
-    return;
+    
+    
 }
