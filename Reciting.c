@@ -58,7 +58,7 @@ int firstpage(){//처음 페이지로 메뉴 고르고 그 값을 반환까지 �
     printf("3. 암송 텍스트 삭제\n");
     printf("4. 암송 텍스트 업데이트\n");
     printf("5. 오늘의 말씀\n");
-    printf("6. 말씀 뽑기\n");
+    //printf("6. 말씀 뽑기\n");
     printf("7. 종료\n\n");
 	
 	
@@ -79,7 +79,7 @@ void reciting(){
     book = fopen("booklist.txt", "r");
     int bi=0;
     char books[66][20], thebook[20];
-	printf("책 선택: \n\n");
+	printf("책 선택: \n");
     while(!feof(book)){
         fscanf(book, "%s", books[bi]);
         printf("%d. %s\n", bi+1, books[bi]);
@@ -125,14 +125,17 @@ void reciting(){
 		if (strlen(t) < 30)//pass if it is contents of verse
 			if (strncmp(t, a, 4) == 0)
 				break;
+        //printf("%s", t);
 	}
-	printf("%s", t);
+	//printf("%s", t);
 	while (!feof(f)) {
 		fscanf(f, "%d. ", &v);
+        //printf("%d %d\n", v, vers);
 		fgets(a, Max, f);
+        //printf("%s", a);
 		if (v == vers)
 			break;
-        printf("%d\n", v);
+        
 	}
 	
 	if (vers != v && strcmp(t, "\n") != 0 && vers != -1) {//if file ends without wanted result, finish the pg with error message
@@ -187,7 +190,7 @@ void reciting(){
 			goto b2;
 		}
 		else if (strcmp(t, ">\n") == 0) {//show the contents of verse
-			hint(t, thebook);
+			hint(a, thebook);
 			goto b2;
 		}
 		else if (strcmp(t, "?\n") == 0) {//jump to next verse
@@ -250,7 +253,7 @@ void delete(){
         i++;
 	}
     fclose(fp);
-	printf("\n\n삭제하고싶은 책의 번호를 입력해주세요. ");
+	printf("\n\n삭제하고싶은 책의 번호를 입력해주세요. 취소하고자 한다면 범위 밖의 값을 입력하세요\n");
 	scanf("%d", &nu);		
 
 	f = fopen("booklist.txt", "w");
@@ -271,7 +274,7 @@ void update(){
 	chl=fopen("booklist.txt","r");
 	while (!feof(chl) ) {
 		fgets( ch , 128, chl);
-		printf("%s\n",ch);
+		printf("%s",ch);
 	}
 	fclose(chl) ; 
 	char uch [60] ;
@@ -299,9 +302,9 @@ void update(){
 
 void hint(char str[] /* 구절 */ , char tf [] /*텍스트 파일 이름*/){
 	int hn ; //원하는 힌트 번호
-	printf("어떤 힌트를 원하시나요?\n1. 첫글자 힌트\n2. 글자 수 힌트\n3. 챕터 힌트\n0. 취소\n ");
-	scanf("%d",&hn);
 	if(strcmp(tf,"dayBibleVerse.txt")==0){
+        printf("어떤 힌트를 원하시나요?\n1. 첫글자 힌트\n2. 글자 수 힌트\n3. 챕터 힌트\n0. 취소\n ");
+	    scanf("%d",&hn);
 		if( hn == 1 ){
 			printf("%c",str[3]);
 		}
@@ -324,15 +327,7 @@ void hint(char str[] /* 구절 */ , char tf [] /*텍스트 파일 이름*/){
 		}
 	}
 	else if(strcmp(tf,"dayBibleVerse.txt")!=0){
-		if( hn == 1 ) {
-			printf("%c",str[3]);
-		}
-		if( hn == 2 ){
-			printf("%lu",strlen(str));
-		}
-		if( hn == 3 ){
-			printf("%c",str[0]);
-		}
+		printf("첫 글자: %c%c%c\n",str[0], str[1], str[2]);
 	}
 }
 
