@@ -11,6 +11,7 @@ The purpose of the program is to help Christians to recite the Scripture well.
 #include <time.h>
 
 void reciting();
+void initialpage();
 int firstpage();
 void create();
 void delete();
@@ -21,6 +22,7 @@ void hint(char str[] , char tf []) ;
 
 int main() {
     int in;
+    initialpage();
 	while(1){
         in = firstpage();
 
@@ -34,8 +36,8 @@ int main() {
             update();
         else if(in == 5)
             each();
-	/*else if(in == 6)
-	        ranVerse(); */
+	    else if(in == 6)
+	        ranVerse(); 
         else if(in == 7)
             break;
         
@@ -46,13 +48,21 @@ int main() {
 	return 0;
 }
 
+void initialpage(){
+    printf("-----------------------------------------------------------\n\n");
+    printf("         복 있는 사람은 악인들의 꾀를 따르지 아니하며          \n");
+    printf("                죄인들의 길에 서지 아니하며                \n");
+    printf("             오만한 자들의 자리에 앉지 아니하고              \n");
+    printf("              오직 여호와의 율법을 즐거워하여                \n");
+    printf("              그의 율법을 주야로 묵상하는도다                \n\n");
+    printf("                     시편 1편 1절                       \n");
+    printf("-----------------------------------------------------------\n\n");
+    printf("말씀 암송 프로그램입니다.\n\n");
 
+}
 int firstpage(){//처음 페이지로 메뉴 고르고 그 값을 반환까지 함. 
     int in;
-    //////////////////////첫 페이지 출력 내용 작성
-	
 
-    printf("말씀 암송 프로그램입니다.\n\n");
     printf("1. 암송 프로그램\n");
     printf("2. 암송 텍스트 만들기\n");
     printf("3. 암송 텍스트 삭제\n");
@@ -60,15 +70,9 @@ int firstpage(){//처음 페이지로 메뉴 고르고 그 값을 반환까지 �
     printf("5. 오늘의 말씀\n");
     //printf("6. 말씀 뽑기\n");
     printf("7. 종료\n\n");
-	
-	
-	
-/////it'll continue
-	
-	
+
     scanf("%d", &in);
     return in;
-
 }
 
 
@@ -102,7 +106,7 @@ void reciting(){
 	
 	printf("\n\n1. 따라쓰기\n2. 암송\n");
 	scanf("%d", &mode);
-	printf("도움말이 필요하면 ?을 누르시오\n");
+	printf("도움말이 필요하면 ?를 입력하세요\n");
 	getchar();
 	printf("\n\n\n");
 	
@@ -390,8 +394,6 @@ void ranVerse(){
 	fclose(fp);
 	printf("%s\n",dv);
 }
-
-
 
 
 void each() {
