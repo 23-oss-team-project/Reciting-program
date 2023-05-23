@@ -35,9 +35,9 @@ int main() {
         else if(in == 4)
             update();
         else if(in == 5)
-            each();
+            each();/*
 	    else if(in == 6)
-	        ranVerse(); 
+	        ranVerse(); */
         else if(in == 7)
             break;
         
