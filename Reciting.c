@@ -67,9 +67,9 @@ int firstpage(){//처음 페이지로 메뉴 고르고 그 값을 반환까지 �
     printf("2. 암송 텍스트 만들기\n");
     printf("3. 암송 텍스트 삭제\n");
     printf("4. 암송 텍스트 업데이트\n");
-    printf("5. 오늘의 말씀\n");
+    printf("5. 오늘의 말씀\n\n");
     //printf("6. 말씀 뽑기\n");
-    printf("7. 종료\n\n");
+    printf("7. 종료\n\n원하는 번호를 입력하세요. >>");
 
     scanf("%d", &in);
     return in;
@@ -253,6 +253,8 @@ void delete(){
     printf("현재 저장되어 있는 책들: \n");
 	while (!feof(fp) ) {
 		fgets( chap[i] , 128, fp);
+		if(strcmp(chap[i], "\n")==0)
+			continue;
 		printf("%d. %s",i+1, chap[i]);
         i++;
 	}
@@ -278,11 +280,12 @@ void update(){
 	chl=fopen("booklist.txt","r");
 	while (!feof(chl) ) {
 		fgets( ch , 128, chl);
-		printf("%s",ch);
+		if(strcmp(ch, "\n")!=0)
+			printf("%s",ch);
 	}
 	fclose(chl) ; 
 	char uch [60] ;
-	printf("수정하고싶은 책을 말해주세요. ");
+	printf("\n\n수정하고싶은 책을 말해주세요. ");
 	scanf("%s",uch) ; 
 	strcat(uch,".txt");
 
